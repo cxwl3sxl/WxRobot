@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using log4net;
+using PinFun.Core.Utils;
 using Vanara.PInvoke;
 // ReSharper disable All
 
@@ -11,13 +12,16 @@ namespace WxRobot
         private readonly string _wxWinClassName;
         private readonly string _wxWinName;
         private readonly ILog _log = LogManager.GetLogger(typeof(WxWindow));
+        private readonly DelayConfig _delayConfig;
+
         private Process _wxProcess;
         private bool _exit;
 
         public event Action WxProcessChanged;
 
-        public WxWindow(string processName, string wxWinClassName = "WeChatMainWndForPC", string wxWinName = "微信")
+        public WxWindow(string processName, DelayConfig delayConfig, string wxWinClassName = "WeChatMainWndForPC", string wxWinName = "微信")
         {
+            _delayConfig = delayConfig;
             _processName = processName;
             _wxWinClassName = wxWinClassName;
             _wxWinName = wxWinName;
@@ -94,28 +98,27 @@ namespace WxRobot
                 User32.SetForegroundWindow(mainWindowPtr);
             }
 
-            await Task.Delay(1000);
+            await Task.Delay(_delayConfig.AfterBringWxToForeground);
             Console.WriteLine("准备发送");
             User32.SetFocus(mainWindowPtr);
 
-            await Task.Delay(100);
+            await Task.Delay(_delayConfig.AfterWxFocused);
             SendKeys.SendWait("^f");
-            await Task.Delay(100);
+            await Task.Delay(_delayConfig.KeyboardAction);
             SendKeys.SendWait("^a");
-            await Task.Delay(100);
+            await Task.Delay(_delayConfig.KeyboardAction);
             SendKeys.SendWait("{DEL}");
 
             Clipboard.SetText(friendName);
             SendKeys.SendWait("^v");
-            await Task.Delay(500);
+            await Task.Delay(_delayConfig.BeforeEnter);
             SendKeys.SendWait("{ENTER}");
-            await Task.Delay(100);
+            await Task.Delay(_delayConfig.KeyboardAction);
 
             Clipboard.SetText(message);
             SendKeys.SendWait("^v");
-            await Task.Delay(100);
+            await Task.Delay(_delayConfig.BeforeEnter);
             SendKeys.SendWait("{ENTER}");
-            await Task.Delay(500);
 
             return null;
         }

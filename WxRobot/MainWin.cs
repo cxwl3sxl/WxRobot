@@ -23,10 +23,12 @@ namespace WxRobot
         private readonly string _dbFile;
         private readonly ConcurrentQueue<MessageInfo> _pendingQueue = new ConcurrentQueue<MessageInfo>();
         private readonly ILog _log = LogManager.GetLogger(typeof(MainWin));
+        private readonly DelayConfig _delayConfig;
 
         public MainWin()
         {
             InitializeComponent();
+            _delayConfig = HostConfig.Instance.GetConfig<DelayConfig>("Delay") ?? new DelayConfig();
             Closing += MainWin_Closing;
             Closed += MainWin_Closed;
             Instance = this;
@@ -41,6 +43,7 @@ namespace WxRobot
             _wxProcessName = TryGetConfig("WxProcessName", "WeChat");
             _wxWinClassName = TryGetConfig("WxWinClassName", "WeChatMainWndForPC");
             _wxWinName = TryGetConfig("WxWinName", "微信");
+            timer1.Interval = _delayConfig.Message;
 
             var portStr = TryGetConfig("WebPort", "8111");
             if (int.TryParse(portStr, out var p))
@@ -104,7 +107,7 @@ namespace WxRobot
                     _wxWindow.Dispose();
                 }
 
-                _wxWindow = new WxWindow(_wxProcessName, _wxWinClassName, _wxWinName);
+                _wxWindow = new WxWindow(_wxProcessName, _delayConfig, _wxWinClassName, _wxWinName);
                 _wxWindow.WxProcessChanged += _wxWindow_WxProcessChanged;
 
                 _webHost?.Stop();

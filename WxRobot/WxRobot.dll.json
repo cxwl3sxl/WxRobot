@@ -1,0 +1,13 @@
+﻿{
+  "WxProcessName": "",
+  "WxWinClassName": "",
+  "WxWinName": "",
+  "WebPort": "",
+  "Delay": {
+    "AfterBringWxToForeground": 1000,
+    "AfterWxFocused": 100,
+    "KeyboardAction": 100,
+    "BeforeEnter": 500,
+    "Message": 1000
+  }
+}
