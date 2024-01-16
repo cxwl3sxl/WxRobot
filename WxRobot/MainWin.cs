@@ -44,6 +44,7 @@ namespace WxRobot
             _wxWinClassName = TryGetConfig("WxWinClassName", "WeChatMainWndForPC");
             _wxWinName = TryGetConfig("WxWinName", "微信");
             timer1.Interval = _delayConfig.Message;
+            _log.Debug($"消息发送间隔:{timer1.Interval}ms");
 
             var portStr = TryGetConfig("WebPort", "8111");
             if (int.TryParse(portStr, out var p))
@@ -132,6 +133,8 @@ namespace WxRobot
                 停止服务ToolStripMenuItem.Enabled = true;
 
                 notifyIcon1.Text = "微信消息发送服务:已启动";
+
+                notifyIcon1.ShowBalloonTip(5000, "启动成功", "服务启动成功，请关闭所有前置窗口，返回到桌面环境，避免进行其他操作。", ToolTipIcon.Info);
 
                 if (Visible)
                 {
@@ -251,7 +254,9 @@ namespace WxRobot
 
             try
             {
+                _wxWindow.TraceMessage("正在推送消息...");
                 var r = await _wxWindow.SendMessage(msg.To, msg.Msg);
+                _wxWindow.TraceMessage($"推送结果:{r}");
 
                 msg.IsSend = r == null;
                 msg.Result = r ?? "";

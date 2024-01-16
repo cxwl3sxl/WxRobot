@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using log4net;
-using PinFun.Core.Utils;
 using Vanara.PInvoke;
 // ReSharper disable All
 
@@ -62,6 +61,11 @@ namespace WxRobot
             }
         }
 
+        public void TraceMessage(string message)
+        {
+            Trace.WriteLine($"[WxRobot] {message}");
+        }
+
         /// <summary>
         /// 发送消息
         /// </summary>
@@ -78,7 +82,7 @@ namespace WxRobot
             HWND mainWindowPtr = _wxProcess.MainWindowHandle;
             if (_wxProcess.MainWindowHandle == IntPtr.Zero)
             {
-                Console.WriteLine("程序没有主窗口，尝试激活...");
+                TraceMessage("程序没有主窗口，尝试激活...");
                 mainWindowPtr = User32.FindWindow(_wxWinClassName, _wxWinName);
                 if (mainWindowPtr == IntPtr.Zero)
                 {
@@ -94,12 +98,12 @@ namespace WxRobot
             }
             else
             {
-                Console.WriteLine("主窗口存在，前置...");
+                TraceMessage("主窗口存在，前置...");
                 User32.SetForegroundWindow(mainWindowPtr);
             }
 
             await Task.Delay(_delayConfig.AfterBringWxToForeground);
-            Console.WriteLine("准备发送");
+            TraceMessage("准备发送");
             User32.SetFocus(mainWindowPtr);
 
             await Task.Delay(_delayConfig.AfterWxFocused);
@@ -111,15 +115,15 @@ namespace WxRobot
 
             Clipboard.SetText(friendName);
             SendKeys.SendWait("^v");
-            await Task.Delay(_delayConfig.BeforeEnter);
+            await Task.Delay(_delayConfig.BeforeSearchFriend);
             SendKeys.SendWait("{ENTER}");
-            await Task.Delay(_delayConfig.KeyboardAction);
+            await Task.Delay(_delayConfig.AfterSearchFriend);
 
             Clipboard.SetText(message);
             SendKeys.SendWait("^v");
-            await Task.Delay(_delayConfig.BeforeEnter);
+            await Task.Delay(_delayConfig.BeforeSendMessage);
             SendKeys.SendWait("{ENTER}");
-
+            TraceMessage("已发送");
             return null;
         }
 

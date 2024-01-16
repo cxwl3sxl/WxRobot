@@ -7,7 +7,9 @@
     "AfterBringWxToForeground": 1000,
     "AfterWxFocused": 100,
     "KeyboardAction": 100,
-    "BeforeEnter": 500,
-    "Message": 1000
+    "BeforeSendMessage": 500,
+    "Message": 1000,
+    "AfterSearchFriend": 500,
+    "BeforeSearchFriend": 500
   }
 }
