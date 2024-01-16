@@ -37,6 +37,7 @@ namespace WxRobot
                 File.WriteAllBytes(_dbFile, Properties.Resources.msg);
             }
 
+            _log.Debug($"当前使用的数据库文件为：{_dbFile}");
             _wxProcessName = TryGetConfig("WxProcessName", "WeChat");
             _wxWinClassName = TryGetConfig("WxWinClassName", "WeChatMainWndForPC");
             _wxWinName = TryGetConfig("WxWinName", "微信");
