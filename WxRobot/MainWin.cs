@@ -4,7 +4,6 @@ using PinFun.Core.Api;
 using PinFun.Core.DataBase;
 using PinFun.Core.ServiceHost.WebHost;
 using PinFun.Core.Utils;
-using Exception = System.Exception;
 
 // ReSharper disable All
 
@@ -28,6 +27,8 @@ namespace WxRobot
         public MainWin()
         {
             InitializeComponent();
+            Closing += MainWin_Closing;
+            Closed += MainWin_Closed;
             Instance = this;
             btnStop.Enabled = false;
             _dbFile = Path.Combine(Util.GetApplicationDir(), "msg.db");
@@ -51,6 +52,33 @@ namespace WxRobot
             }
         }
 
+        private async void MainWin_Closed(object sender, EventArgs e)
+        {
+            await Shutdown();
+        }
+
+        private void MainWin_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var r = MessageBox.Show(@"确定要退出程序么？
+是: 退出程序
+否: 不做任何处理
+取消: 最小化到任务栏", "温馨提示", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            if (r == DialogResult.No)
+            {
+                e.Cancel = true;
+            }
+            else if (r == DialogResult.Cancel)
+            {
+                e.Cancel = true;
+                if (Visible)
+                {
+                    ShowInTaskbar = false;
+                    WindowState = FormWindowState.Minimized;
+                    Visible = false;
+                }
+            }
+        }
+
         string TryGetConfig(string name, string defaultVal)
         {
             var v = HostConfig.Instance.GetConfig<string>(name);
@@ -62,6 +90,7 @@ namespace WxRobot
             try
             {
                 btnStart.Enabled = false;
+                启动服务ToolStripMenuItem.Enabled = false;
                 if (_wxWindow != null)
                 {
                     _wxWindow.WxProcessChanged -= _wxWindow_WxProcessChanged;
@@ -88,12 +117,15 @@ namespace WxRobot
                 tslPort.Text = $"http://localhost:{_port}/api";
                 tslRunningStatus.Text = "运行中";
                 btnStart.Enabled = false;
+                启动服务ToolStripMenuItem.Enabled = false;
                 btnStop.Enabled = true;
+                停止服务ToolStripMenuItem.Enabled = true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"启动失败：{ex.Message}");
                 btnStart.Enabled = true;
+                启动服务ToolStripMenuItem.Enabled = true;
             }
         }
 
@@ -137,18 +169,22 @@ namespace WxRobot
             try
             {
                 btnStop.Enabled = false;
+                停止服务ToolStripMenuItem.Enabled = false;
                 timer1.Stop();
                 await Shutdown();
                 tslPort.Text = "";
                 tslWxPid.Text = "";
                 tslRunningStatus.Text = "已停止";
                 btnStart.Enabled = true;
+                启动服务ToolStripMenuItem.Enabled = true;
                 btnStop.Enabled = false;
+                停止服务ToolStripMenuItem.Enabled = false;
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"停止失败:{ex.Message}");
                 btnStop.Enabled = true;
+                停止服务ToolStripMenuItem.Enabled = true;
             }
         }
 
@@ -220,6 +256,29 @@ namespace WxRobot
                 IdMsg = idMsg
             });
             return msg;
+        }
+
+        private void 启动服务ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            btnStart_Click(null, e);
+        }
+
+        private void 停止服务ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            btnStop_Click(null, e);
+        }
+
+        private void 退出程序ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (Visible) return;
+            Visible = true;
+            ShowInTaskbar = true;
+            WindowState = FormWindowState.Normal;
         }
     }
 }

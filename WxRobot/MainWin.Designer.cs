@@ -29,7 +29,12 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWin));
             notifyIcon1 = new NotifyIcon(components);
+            contextMenuStrip1 = new ContextMenuStrip(components);
+            启动服务ToolStripMenuItem = new ToolStripMenuItem();
+            停止服务ToolStripMenuItem = new ToolStripMenuItem();
+            退出程序ToolStripMenuItem = new ToolStripMenuItem();
             statusStrip1 = new StatusStrip();
             tslRunningStatus = new ToolStripStatusLabel();
             tslPort = new ToolStripStatusLabel();
@@ -38,13 +43,44 @@
             btnStart = new Button();
             btnStop = new Button();
             timer1 = new System.Windows.Forms.Timer(components);
+            contextMenuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // notifyIcon1
             // 
-            notifyIcon1.Text = "notifyIcon1";
+            notifyIcon1.ContextMenuStrip = contextMenuStrip1;
+            notifyIcon1.Icon = (Icon)resources.GetObject("notifyIcon1.Icon");
+            notifyIcon1.Text = "微信消息发送服务";
             notifyIcon1.Visible = true;
+            notifyIcon1.MouseDoubleClick += notifyIcon1_MouseDoubleClick;
+            // 
+            // contextMenuStrip1
+            // 
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { 启动服务ToolStripMenuItem, 停止服务ToolStripMenuItem, 退出程序ToolStripMenuItem });
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.Size = new Size(125, 70);
+            // 
+            // 启动服务ToolStripMenuItem
+            // 
+            启动服务ToolStripMenuItem.Name = "启动服务ToolStripMenuItem";
+            启动服务ToolStripMenuItem.Size = new Size(124, 22);
+            启动服务ToolStripMenuItem.Text = "启动服务";
+            启动服务ToolStripMenuItem.Click += 启动服务ToolStripMenuItem_Click;
+            // 
+            // 停止服务ToolStripMenuItem
+            // 
+            停止服务ToolStripMenuItem.Name = "停止服务ToolStripMenuItem";
+            停止服务ToolStripMenuItem.Size = new Size(124, 22);
+            停止服务ToolStripMenuItem.Text = "停止服务";
+            停止服务ToolStripMenuItem.Click += 停止服务ToolStripMenuItem_Click;
+            // 
+            // 退出程序ToolStripMenuItem
+            // 
+            退出程序ToolStripMenuItem.Name = "退出程序ToolStripMenuItem";
+            退出程序ToolStripMenuItem.Size = new Size(124, 22);
+            退出程序ToolStripMenuItem.Text = "退出程序";
+            退出程序ToolStripMenuItem.Click += 退出程序ToolStripMenuItem_Click;
             // 
             // statusStrip1
             // 
@@ -112,10 +148,13 @@
             Controls.Add(btnStart);
             Controls.Add(statusStrip1);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "MainWin";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "微信消息推送服务";
+            contextMenuStrip1.ResumeLayout(false);
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             ResumeLayout(false);
@@ -132,5 +171,9 @@
         private Button btnStop;
         private ToolStripStatusLabel tslPort;
         private System.Windows.Forms.Timer timer1;
+        private ContextMenuStrip contextMenuStrip1;
+        private ToolStripMenuItem 启动服务ToolStripMenuItem;
+        private ToolStripMenuItem 停止服务ToolStripMenuItem;
+        private ToolStripMenuItem 退出程序ToolStripMenuItem;
     }
 }
