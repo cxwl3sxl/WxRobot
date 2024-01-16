@@ -112,6 +112,7 @@ namespace WxRobot
             SendKeys.SendWait("^a");
             await Task.Delay(_delayConfig.KeyboardAction);
             SendKeys.SendWait("{DEL}");
+            await Task.Delay(_delayConfig.KeyboardAction);
 
             Clipboard.SetText(friendName);
             SendKeys.SendWait("^v");
