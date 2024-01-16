@@ -154,6 +154,7 @@
             Name = "MainWin";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "微信消息推送服务";
+            Load += MainWin_Load;
             contextMenuStrip1.ResumeLayout(false);
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();

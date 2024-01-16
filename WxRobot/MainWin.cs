@@ -70,13 +70,19 @@ namespace WxRobot
             else if (r == DialogResult.Cancel)
             {
                 e.Cancel = true;
+
                 if (Visible)
                 {
-                    ShowInTaskbar = false;
-                    WindowState = FormWindowState.Minimized;
-                    Visible = false;
+                    MiniToTaskBar();
                 }
             }
+        }
+
+        void MiniToTaskBar()
+        {
+            ShowInTaskbar = false;
+            WindowState = FormWindowState.Minimized;
+            Visible = false;
         }
 
         string TryGetConfig(string name, string defaultVal)
@@ -275,10 +281,21 @@ namespace WxRobot
 
         private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (Visible) return;
             Visible = true;
             ShowInTaskbar = true;
             WindowState = FormWindowState.Normal;
+        }
+
+        private void MainWin_Load(object sender, EventArgs e)
+        {
+            if (Environment.GetCommandLineArgs().Contains("start-service"))
+            {
+                btnStart_Click(null, null);
+                MiniToTaskBar();
+            }
+
+            btnStart.Enabled = 启动服务ToolStripMenuItem.Enabled = true;
+            btnStop.Enabled = 停止服务ToolStripMenuItem.Enabled = false;
         }
     }
 }

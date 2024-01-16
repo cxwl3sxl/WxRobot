@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "WxRobot": {
+      "commandName": "Project",
+      "commandLineArgs": "start-service"
+    }
+  }
+}
