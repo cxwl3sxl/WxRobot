@@ -98,24 +98,24 @@ namespace WxRobot
             Console.WriteLine("准备发送");
             User32.SetFocus(mainWindowPtr);
 
-            await Task.Delay(200);
+            await Task.Delay(100);
             SendKeys.SendWait("^f");
-            await Task.Delay(200);
+            await Task.Delay(100);
             SendKeys.SendWait("^a");
-            await Task.Delay(200);
+            await Task.Delay(100);
             SendKeys.SendWait("{DEL}");
 
             Clipboard.SetText(friendName);
             SendKeys.SendWait("^v");
-            await Task.Delay(1000);
+            await Task.Delay(500);
             SendKeys.SendWait("{ENTER}");
-            await Task.Delay(200);
+            await Task.Delay(100);
 
             Clipboard.SetText(message);
             SendKeys.SendWait("^v");
-            await Task.Delay(200);
+            await Task.Delay(100);
             SendKeys.SendWait("{ENTER}");
-            await Task.Delay(1000);
+            await Task.Delay(500);
 
             return null;
         }

@@ -126,6 +126,13 @@ namespace WxRobot
                 启动服务ToolStripMenuItem.Enabled = false;
                 btnStop.Enabled = true;
                 停止服务ToolStripMenuItem.Enabled = true;
+
+                notifyIcon1.Text = "微信消息发送服务:已启动";
+
+                if (Visible)
+                {
+                    MiniToTaskBar();
+                }
             }
             catch (Exception ex)
             {
@@ -185,6 +192,8 @@ namespace WxRobot
                 启动服务ToolStripMenuItem.Enabled = true;
                 btnStop.Enabled = false;
                 停止服务ToolStripMenuItem.Enabled = false;
+
+                notifyIcon1.Text = "微信消息发送服务:已停止";
             }
             catch (Exception ex)
             {
