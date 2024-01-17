@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using log4net;
+using Newtonsoft.Json;
 using PinFun.Core.Api;
 using PinFun.Core.DataBase;
 using PinFun.Core.ServiceHost.WebHost;
@@ -263,15 +264,31 @@ namespace WxRobot
 
                 msg.IsSend = r == null;
                 msg.Result = r ?? "";
+            }
+            catch (Exception ex)
+            {
+                msg.Result = $"错误:{ex.Message}";
+                _log.Warn($"发送消息{msg.IdMsg}出错", ex);
+            }
+            finally
+            {
                 msg.LastUpdateAt = DateTime.Now;
                 msg.LastUpdateByName = "System";
                 msg.LastUpdateId = Guid.Empty;
+                UpdateMessageSendResult(msg);
+            }
+        }
+
+        void UpdateMessageSendResult(MessageInfo msg)
+        {
+            try
+            {
                 using var db = CreateDb();
                 db.Update(msg);
             }
             catch (Exception ex)
             {
-                _log.Warn($"发送消息{msg.IdMsg}出错", ex);
+                _log.Warn($"更新消息发送结果出错, 待更新数据详情为：{Environment.NewLine}{JsonConvert.SerializeObject(msg)}", ex);
             }
         }
 
