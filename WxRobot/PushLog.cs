@@ -24,7 +24,7 @@ namespace WxRobot
                 var sql = "select * from MessageInfo where CreateAt>=@begin and CreateAt<=@end";
                 if (!string.IsNullOrWhiteSpace(friend))
                 {
-                    sql += " and To=@friend";
+                    sql += " and [To]=@friend";
                 }
 
                 sql += " order by CreateAt desc";

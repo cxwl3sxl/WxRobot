@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Diagnostics;
 using log4net;
 using Newtonsoft.Json;
 using PinFun.Core.Api;
@@ -254,6 +255,8 @@ namespace WxRobot
             if (!_wxWindow.IsWxRunning) return;
             if (!_pendingQueue.TryDequeue(out var msg)) return;
 
+            tsslQueue.Text = $"发送队列:{_pendingQueue.Count}";
+
             try
             {
                 _wxWindow.TraceMessage("正在推送消息...");
@@ -354,6 +357,18 @@ namespace WxRobot
         {
             _pushLogWin.Closed -= _pushLogWin_Closed;
             _pushLogWin = null;
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            try
+            {
+                Process.Start(linkLabel1.Text);
+            }
+            catch
+            {
+
+            }
         }
     }
 }

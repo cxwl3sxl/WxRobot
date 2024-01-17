@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWin));
             notifyIcon1 = new NotifyIcon(components);
             contextMenuStrip1 = new ContextMenuStrip(components);
+            推送日志ToolStripMenuItem = new ToolStripMenuItem();
             启动服务ToolStripMenuItem = new ToolStripMenuItem();
             停止服务ToolStripMenuItem = new ToolStripMenuItem();
             退出程序ToolStripMenuItem = new ToolStripMenuItem();
@@ -40,10 +41,14 @@
             tslPort = new ToolStripStatusLabel();
             toolStripStatusLabel1 = new ToolStripStatusLabel();
             tslWxPid = new ToolStripStatusLabel();
+            tsslQueue = new ToolStripStatusLabel();
+            toolStripStatusLabel2 = new ToolStripStatusLabel();
             btnStart = new Button();
             btnStop = new Button();
             timer1 = new System.Windows.Forms.Timer(components);
-            推送日志ToolStripMenuItem = new ToolStripMenuItem();
+            label1 = new Label();
+            label2 = new Label();
+            linkLabel1 = new LinkLabel();
             contextMenuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
             SuspendLayout();
@@ -60,35 +65,42 @@
             // 
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] { 推送日志ToolStripMenuItem, 启动服务ToolStripMenuItem, 停止服务ToolStripMenuItem, 退出程序ToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(181, 114);
+            contextMenuStrip1.Size = new Size(125, 92);
+            // 
+            // 推送日志ToolStripMenuItem
+            // 
+            推送日志ToolStripMenuItem.Name = "推送日志ToolStripMenuItem";
+            推送日志ToolStripMenuItem.Size = new Size(124, 22);
+            推送日志ToolStripMenuItem.Text = "推送日志";
+            推送日志ToolStripMenuItem.Click += 推送日志ToolStripMenuItem_Click;
             // 
             // 启动服务ToolStripMenuItem
             // 
             启动服务ToolStripMenuItem.Name = "启动服务ToolStripMenuItem";
-            启动服务ToolStripMenuItem.Size = new Size(180, 22);
+            启动服务ToolStripMenuItem.Size = new Size(124, 22);
             启动服务ToolStripMenuItem.Text = "启动服务";
             启动服务ToolStripMenuItem.Click += 启动服务ToolStripMenuItem_Click;
             // 
             // 停止服务ToolStripMenuItem
             // 
             停止服务ToolStripMenuItem.Name = "停止服务ToolStripMenuItem";
-            停止服务ToolStripMenuItem.Size = new Size(180, 22);
+            停止服务ToolStripMenuItem.Size = new Size(124, 22);
             停止服务ToolStripMenuItem.Text = "停止服务";
             停止服务ToolStripMenuItem.Click += 停止服务ToolStripMenuItem_Click;
             // 
             // 退出程序ToolStripMenuItem
             // 
             退出程序ToolStripMenuItem.Name = "退出程序ToolStripMenuItem";
-            退出程序ToolStripMenuItem.Size = new Size(180, 22);
+            退出程序ToolStripMenuItem.Size = new Size(124, 22);
             退出程序ToolStripMenuItem.Text = "退出程序";
             退出程序ToolStripMenuItem.Click += 退出程序ToolStripMenuItem_Click;
             // 
             // statusStrip1
             // 
-            statusStrip1.Items.AddRange(new ToolStripItem[] { tslRunningStatus, tslPort, toolStripStatusLabel1, tslWxPid });
-            statusStrip1.Location = new Point(0, 99);
+            statusStrip1.Items.AddRange(new ToolStripItem[] { tslRunningStatus, tslPort, toolStripStatusLabel1, tsslQueue, toolStripStatusLabel2, tslWxPid });
+            statusStrip1.Location = new Point(0, 172);
             statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(360, 22);
+            statusStrip1.Size = new Size(506, 22);
             statusStrip1.SizingGrip = false;
             statusStrip1.Stretch = false;
             statusStrip1.TabIndex = 1;
@@ -103,23 +115,37 @@
             // tslPort
             // 
             tslPort.Name = "tslPort";
-            tslPort.Size = new Size(0, 17);
+            tslPort.Size = new Size(56, 17);
+            tslPort.Text = "服务端口";
             // 
             // toolStripStatusLabel1
             // 
             toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            toolStripStatusLabel1.Size = new Size(301, 17);
+            toolStripStatusLabel1.Size = new Size(102, 17);
             toolStripStatusLabel1.Spring = true;
             // 
             // tslWxPid
             // 
             tslWxPid.Name = "tslWxPid";
-            tslWxPid.Size = new Size(0, 17);
+            tslWxPid.Size = new Size(80, 17);
+            tslWxPid.Text = "微信进程信息";
+            // 
+            // tsslQueue
+            // 
+            tsslQueue.Name = "tsslQueue";
+            tsslQueue.Size = new Size(75, 17);
+            tsslQueue.Text = "发送队列：0";
+            // 
+            // toolStripStatusLabel2
+            // 
+            toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            toolStripStatusLabel2.Size = new Size(102, 17);
+            toolStripStatusLabel2.Spring = true;
             // 
             // btnStart
             // 
             btnStart.Image = Properties.Resources.启动;
-            btnStart.Location = new Point(103, 22);
+            btnStart.Location = new Point(430, 12);
             btnStart.Name = "btnStart";
             btnStart.Size = new Size(64, 64);
             btnStart.TabIndex = 2;
@@ -129,7 +155,7 @@
             // btnStop
             // 
             btnStop.Image = Properties.Resources.停止;
-            btnStop.Location = new Point(193, 22);
+            btnStop.Location = new Point(430, 97);
             btnStop.Name = "btnStop";
             btnStop.Size = new Size(64, 64);
             btnStop.TabIndex = 3;
@@ -140,18 +166,46 @@
             // 
             timer1.Tick += timer1_Tick;
             // 
-            // 推送日志ToolStripMenuItem
+            // label1
             // 
-            推送日志ToolStripMenuItem.Name = "推送日志ToolStripMenuItem";
-            推送日志ToolStripMenuItem.Size = new Size(180, 22);
-            推送日志ToolStripMenuItem.Text = "推送日志";
-            推送日志ToolStripMenuItem.Click += 推送日志ToolStripMenuItem_Click;
+            label1.AutoSize = true;
+            label1.Font = new Font("Microsoft YaHei UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            label1.ForeColor = SystemColors.Highlight;
+            label1.Location = new Point(55, 9);
+            label1.Name = "label1";
+            label1.Size = new Size(223, 21);
+            label1.TabIndex = 4;
+            label1.Text = "基于微信PC版的消息推送服务";
+            // 
+            // label2
+            // 
+            label2.Location = new Point(12, 36);
+            label2.Name = "label2";
+            label2.Size = new Size(412, 93);
+            label2.TabIndex = 5;
+            label2.Text = "本服务实现原理为模拟人工操作，需要激活微信窗体才能发送消息\r\n所以：\r\n1. 必须保证微信处于登录状态\r\n2. 必须保证没有前台激活窗体，否则导致程序无法激活窗体而导致发送失败";
+            // 
+            // linkLabel1
+            // 
+            linkLabel1.AutoSize = true;
+            linkLabel1.LinkBehavior = LinkBehavior.HoverUnderline;
+            linkLabel1.Location = new Point(199, 144);
+            linkLabel1.Name = "linkLabel1";
+            linkLabel1.Size = new Size(225, 17);
+            linkLabel1.TabIndex = 6;
+            linkLabel1.TabStop = true;
+            linkLabel1.Text = "https://github.com/cxwl3sxl/WxRobot";
+            linkLabel1.VisitedLinkColor = Color.Blue;
+            linkLabel1.LinkClicked += linkLabel1_LinkClicked;
             // 
             // MainWin
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(360, 121);
+            ClientSize = new Size(506, 194);
+            Controls.Add(linkLabel1);
+            Controls.Add(label2);
+            Controls.Add(label1);
             Controls.Add(btnStop);
             Controls.Add(btnStart);
             Controls.Add(statusStrip1);
@@ -185,5 +239,10 @@
         private ToolStripMenuItem 停止服务ToolStripMenuItem;
         private ToolStripMenuItem 退出程序ToolStripMenuItem;
         private ToolStripMenuItem 推送日志ToolStripMenuItem;
+        private Label label1;
+        private Label label2;
+        private LinkLabel linkLabel1;
+        private ToolStripStatusLabel tsslQueue;
+        private ToolStripStatusLabel toolStripStatusLabel2;
     }
 }
