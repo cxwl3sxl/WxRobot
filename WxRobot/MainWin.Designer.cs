@@ -40,9 +40,9 @@
             tslRunningStatus = new ToolStripStatusLabel();
             tslPort = new ToolStripStatusLabel();
             toolStripStatusLabel1 = new ToolStripStatusLabel();
-            tslWxPid = new ToolStripStatusLabel();
             tsslQueue = new ToolStripStatusLabel();
             toolStripStatusLabel2 = new ToolStripStatusLabel();
+            tslWxPid = new ToolStripStatusLabel();
             btnStart = new Button();
             btnStop = new Button();
             timer1 = new System.Windows.Forms.Timer(components);
@@ -98,7 +98,7 @@
             // statusStrip1
             // 
             statusStrip1.Items.AddRange(new ToolStripItem[] { tslRunningStatus, tslPort, toolStripStatusLabel1, tsslQueue, toolStripStatusLabel2, tslWxPid });
-            statusStrip1.Location = new Point(0, 172);
+            statusStrip1.Location = new Point(0, 188);
             statusStrip1.Name = "statusStrip1";
             statusStrip1.Size = new Size(506, 22);
             statusStrip1.SizingGrip = false;
@@ -121,14 +121,8 @@
             // toolStripStatusLabel1
             // 
             toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            toolStripStatusLabel1.Size = new Size(102, 17);
+            toolStripStatusLabel1.Size = new Size(118, 17);
             toolStripStatusLabel1.Spring = true;
-            // 
-            // tslWxPid
-            // 
-            tslWxPid.Name = "tslWxPid";
-            tslWxPid.Size = new Size(80, 17);
-            tslWxPid.Text = "微信进程信息";
             // 
             // tsslQueue
             // 
@@ -139,13 +133,19 @@
             // toolStripStatusLabel2
             // 
             toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            toolStripStatusLabel2.Size = new Size(102, 17);
+            toolStripStatusLabel2.Size = new Size(118, 17);
             toolStripStatusLabel2.Spring = true;
+            // 
+            // tslWxPid
+            // 
+            tslWxPid.Name = "tslWxPid";
+            tslWxPid.Size = new Size(80, 17);
+            tslWxPid.Text = "微信进程信息";
             // 
             // btnStart
             // 
             btnStart.Image = Properties.Resources.启动;
-            btnStart.Location = new Point(430, 12);
+            btnStart.Location = new Point(430, 50);
             btnStart.Name = "btnStart";
             btnStart.Size = new Size(64, 64);
             btnStart.TabIndex = 2;
@@ -155,7 +155,7 @@
             // btnStop
             // 
             btnStop.Image = Properties.Resources.停止;
-            btnStop.Location = new Point(430, 97);
+            btnStop.Location = new Point(430, 120);
             btnStop.Name = "btnStop";
             btnStop.Size = new Size(64, 64);
             btnStop.TabIndex = 3;
@@ -171,7 +171,7 @@
             label1.AutoSize = true;
             label1.Font = new Font("Microsoft YaHei UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
             label1.ForeColor = SystemColors.Highlight;
-            label1.Location = new Point(55, 9);
+            label1.Location = new Point(146, 9);
             label1.Name = "label1";
             label1.Size = new Size(223, 21);
             label1.TabIndex = 4;
@@ -189,7 +189,7 @@
             // 
             linkLabel1.AutoSize = true;
             linkLabel1.LinkBehavior = LinkBehavior.HoverUnderline;
-            linkLabel1.Location = new Point(199, 144);
+            linkLabel1.Location = new Point(199, 167);
             linkLabel1.Name = "linkLabel1";
             linkLabel1.Size = new Size(225, 17);
             linkLabel1.TabIndex = 6;
@@ -202,7 +202,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(506, 194);
+            ClientSize = new Size(506, 210);
             Controls.Add(linkLabel1);
             Controls.Add(label2);
             Controls.Add(label1);
