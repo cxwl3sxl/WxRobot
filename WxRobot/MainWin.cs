@@ -258,6 +258,8 @@ namespace WxRobot
                 var r = await _wxWindow.SendMessage(msg.To, msg.Msg);
                 _wxWindow.TraceMessage($"推送结果:{r}");
 
+                _log.Debug($"推送记录{msg.IdMsg} 推送结果：{r}");
+
                 msg.IsSend = r == null;
                 msg.Result = r ?? "";
                 msg.LastUpdateAt = DateTime.Now;
