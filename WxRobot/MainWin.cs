@@ -256,7 +256,7 @@ namespace WxRobot
             if (_wxWindow == null) return;
             if (!_wxWindow.IsWxRunning) return;
             if ((DateTime.Now - _lastSendAt).TotalMilliseconds <= _delayConfig.Message) return;
-            if(_isSending) return;
+            if (_isSending) return;
 
             _isSending = true;
             if (!_pendingQueue.TryDequeue(out var msg))
@@ -380,6 +380,17 @@ namespace WxRobot
             {
 
             }
+        }
+
+        public string Status()
+        {
+            if (_wxWindow == null) return "尚未初始化";
+            return $"多实例：{_wxWindow.HasMulti} 运行中：{_wxWindow.IsWxRunning}";
+        }
+
+        public int PendingQueue()
+        {
+            return _pendingQueue.Count;
         }
     }
 }

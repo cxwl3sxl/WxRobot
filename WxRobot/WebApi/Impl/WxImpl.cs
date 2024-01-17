@@ -11,4 +11,14 @@ class WxImpl : IWx
     {
         return MainWin.Instance?.CheckResult(idMsg);
     }
+
+    public string Status()
+    {
+        return MainWin.Instance?.Status();
+    }
+
+    public int PendingQueue()
+    {
+        return MainWin.Instance?.PendingQueue() ?? 0;
+    }
 }
