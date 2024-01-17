@@ -23,6 +23,11 @@
         public int BeforeSendMessage { get; set; } = 500;
 
         /// <summary>
+        /// 发送消息后
+        /// </summary>
+        public int AfterSendMessage { get; set; } = 500;
+
+        /// <summary>
         /// 两条消息之间的延时
         /// </summary>
         public int Message { get; set; } = 1000;

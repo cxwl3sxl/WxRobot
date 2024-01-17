@@ -103,27 +103,33 @@ namespace WxRobot
             }
 
             await Task.Delay(_delayConfig.AfterBringWxToForeground);
-            TraceMessage("准备发送");
+            TraceMessage("搜索用户...");
             User32.SetFocus(mainWindowPtr);
 
             await Task.Delay(_delayConfig.AfterWxFocused);
             SendKeys.SendWait("^f");
             await Task.Delay(_delayConfig.KeyboardAction);
+            TraceMessage("清空当前搜索条件...");
             SendKeys.SendWait("^a");
             await Task.Delay(_delayConfig.KeyboardAction);
             SendKeys.SendWait("{DEL}");
             await Task.Delay(_delayConfig.KeyboardAction);
 
+            TraceMessage("粘贴用户名...");
             Clipboard.SetText(friendName);
             SendKeys.SendWait("^v");
             await Task.Delay(_delayConfig.BeforeSearchFriend);
+            TraceMessage("搜索用户...");
             SendKeys.SendWait("{ENTER}");
             await Task.Delay(_delayConfig.AfterSearchFriend);
 
+            TraceMessage("粘贴待发送的消息...");
             Clipboard.SetText(message);
             SendKeys.SendWait("^v");
             await Task.Delay(_delayConfig.BeforeSendMessage);
+            TraceMessage("发送消息...");
             SendKeys.SendWait("{ENTER}");
+            await Task.Delay(_delayConfig.AfterSendMessage);
             TraceMessage("已发送");
             return null;
         }

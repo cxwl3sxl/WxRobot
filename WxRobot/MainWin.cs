@@ -18,6 +18,8 @@ namespace WxRobot
         private WxWindow _wxWindow;
         private WebHost _webHost;
         private PushLog _pushLogWin;
+        private DateTime _lastSendAt;
+        private bool _isSending;
 
         private readonly string _wxProcessName;
         private readonly string _wxWinClassName;
@@ -31,6 +33,7 @@ namespace WxRobot
         public MainWin()
         {
             InitializeComponent();
+            _lastSendAt = DateTime.Now;
             _delayConfig = HostConfig.Instance.GetConfig<DelayConfig>("Delay") ?? new DelayConfig();
             Closing += MainWin_Closing;
             Closed += MainWin_Closed;
@@ -46,7 +49,6 @@ namespace WxRobot
             _wxProcessName = TryGetConfig("WxProcessName", "WeChat");
             _wxWinClassName = TryGetConfig("WxWinClassName", "WeChatMainWndForPC");
             _wxWinName = TryGetConfig("WxWinName", "微信");
-            timer1.Interval = _delayConfig.Message;
             _log.Debug($"消息发送间隔:{timer1.Interval}ms");
 
             var portStr = TryGetConfig("WebPort", "8111");
@@ -253,7 +255,15 @@ namespace WxRobot
         {
             if (_wxWindow == null) return;
             if (!_wxWindow.IsWxRunning) return;
-            if (!_pendingQueue.TryDequeue(out var msg)) return;
+            if ((DateTime.Now - _lastSendAt).TotalMilliseconds <= _delayConfig.Message) return;
+            if(_isSending) return;
+
+            _isSending = true;
+            if (!_pendingQueue.TryDequeue(out var msg))
+            {
+                _isSending = false;
+                return;
+            }
 
             tsslQueue.Text = $"发送队列:{_pendingQueue.Count}";
 
@@ -275,7 +285,8 @@ namespace WxRobot
             }
             finally
             {
-                msg.LastUpdateAt = DateTime.Now;
+                _isSending = false;
+                msg.LastUpdateAt = _lastSendAt = DateTime.Now;
                 msg.LastUpdateByName = "System";
                 msg.LastUpdateId = Guid.Empty;
                 UpdateMessageSendResult(msg);
