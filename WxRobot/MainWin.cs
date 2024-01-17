@@ -15,6 +15,7 @@ namespace WxRobot
 
         private WxWindow _wxWindow;
         private WebHost _webHost;
+        private PushLog _pushLogWin;
 
         private readonly string _wxProcessName;
         private readonly string _wxWinClassName;
@@ -218,7 +219,7 @@ namespace WxRobot
             _webHost = null;
         }
 
-        Db CreateDb()
+        public Db CreateDb()
         {
             return new Db(DbTypes.Sqlite, $"Data Source={_dbFile};Version=3;BinaryGUID=0", false);
         }
@@ -316,6 +317,26 @@ namespace WxRobot
 
             btnStart.Enabled = 启动服务ToolStripMenuItem.Enabled = true;
             btnStop.Enabled = 停止服务ToolStripMenuItem.Enabled = false;
+        }
+
+        private void 推送日志ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (_pushLogWin != null)
+            {
+                _pushLogWin.BringToFront();
+                return;
+            }
+
+            _pushLogWin = new PushLog();
+            _pushLogWin.Closed += _pushLogWin_Closed;
+            _pushLogWin.StartPosition = FormStartPosition.CenterScreen;
+            _pushLogWin.Show();
+        }
+
+        private void _pushLogWin_Closed(object sender, EventArgs e)
+        {
+            _pushLogWin.Closed -= _pushLogWin_Closed;
+            _pushLogWin = null;
         }
     }
 }

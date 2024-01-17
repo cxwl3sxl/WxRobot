@@ -43,6 +43,7 @@
             btnStart = new Button();
             btnStop = new Button();
             timer1 = new System.Windows.Forms.Timer(components);
+            推送日志ToolStripMenuItem = new ToolStripMenuItem();
             contextMenuStrip1.SuspendLayout();
             statusStrip1.SuspendLayout();
             SuspendLayout();
@@ -57,28 +58,28 @@
             // 
             // contextMenuStrip1
             // 
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { 启动服务ToolStripMenuItem, 停止服务ToolStripMenuItem, 退出程序ToolStripMenuItem });
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { 推送日志ToolStripMenuItem, 启动服务ToolStripMenuItem, 停止服务ToolStripMenuItem, 退出程序ToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(125, 70);
+            contextMenuStrip1.Size = new Size(181, 114);
             // 
             // 启动服务ToolStripMenuItem
             // 
             启动服务ToolStripMenuItem.Name = "启动服务ToolStripMenuItem";
-            启动服务ToolStripMenuItem.Size = new Size(124, 22);
+            启动服务ToolStripMenuItem.Size = new Size(180, 22);
             启动服务ToolStripMenuItem.Text = "启动服务";
             启动服务ToolStripMenuItem.Click += 启动服务ToolStripMenuItem_Click;
             // 
             // 停止服务ToolStripMenuItem
             // 
             停止服务ToolStripMenuItem.Name = "停止服务ToolStripMenuItem";
-            停止服务ToolStripMenuItem.Size = new Size(124, 22);
+            停止服务ToolStripMenuItem.Size = new Size(180, 22);
             停止服务ToolStripMenuItem.Text = "停止服务";
             停止服务ToolStripMenuItem.Click += 停止服务ToolStripMenuItem_Click;
             // 
             // 退出程序ToolStripMenuItem
             // 
             退出程序ToolStripMenuItem.Name = "退出程序ToolStripMenuItem";
-            退出程序ToolStripMenuItem.Size = new Size(124, 22);
+            退出程序ToolStripMenuItem.Size = new Size(180, 22);
             退出程序ToolStripMenuItem.Text = "退出程序";
             退出程序ToolStripMenuItem.Click += 退出程序ToolStripMenuItem_Click;
             // 
@@ -139,6 +140,13 @@
             // 
             timer1.Tick += timer1_Tick;
             // 
+            // 推送日志ToolStripMenuItem
+            // 
+            推送日志ToolStripMenuItem.Name = "推送日志ToolStripMenuItem";
+            推送日志ToolStripMenuItem.Size = new Size(180, 22);
+            推送日志ToolStripMenuItem.Text = "推送日志";
+            推送日志ToolStripMenuItem.Click += 推送日志ToolStripMenuItem_Click;
+            // 
             // MainWin
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
@@ -176,5 +184,6 @@
         private ToolStripMenuItem 启动服务ToolStripMenuItem;
         private ToolStripMenuItem 停止服务ToolStripMenuItem;
         private ToolStripMenuItem 退出程序ToolStripMenuItem;
+        private ToolStripMenuItem 推送日志ToolStripMenuItem;
     }
 }
