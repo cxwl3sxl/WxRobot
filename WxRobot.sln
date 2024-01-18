@@ -5,6 +5,8 @@ VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WxRobot", "WxRobot\WxRobot.csproj", "{6C56FE36-8596-4A04-8BA6-B23A6F7CDD6C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageSendTest", "MessageSendTest\MessageSendTest.csproj", "{C46BCCB6-A70D-40CB-B9ED-93EC6AD67B5A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{6C56FE36-8596-4A04-8BA6-B23A6F7CDD6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C56FE36-8596-4A04-8BA6-B23A6F7CDD6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C56FE36-8596-4A04-8BA6-B23A6F7CDD6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C46BCCB6-A70D-40CB-B9ED-93EC6AD67B5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C46BCCB6-A70D-40CB-B9ED-93EC6AD67B5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C46BCCB6-A70D-40CB-B9ED-93EC6AD67B5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C46BCCB6-A70D-40CB-B9ED-93EC6AD67B5A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
