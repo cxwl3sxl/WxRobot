@@ -398,5 +398,10 @@ namespace WxRobot
         {
             return _pendingQueue.Count;
         }
+
+        public string Login()
+        {
+            return _wxWindow?.Login();
+        }
     }
 }

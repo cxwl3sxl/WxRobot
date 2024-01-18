@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
+using System.Drawing.Imaging;
 using FlaUI.Core.AutomationElements;
+using FlaUI.Core.Definitions;
 using FlaUI.UIA3;
 using log4net;
 using Vanara.PInvoke;
@@ -20,7 +22,8 @@ namespace WxRobot
 
         public event Action WxProcessChanged;
 
-        public WxWindow(string processName, DelayConfig delayConfig, string wxWinClassName = "WeChatMainWndForPC", string wxWinName = "微信")
+        public WxWindow(string processName, DelayConfig delayConfig, string wxWinClassName = "WeChatMainWndForPC",
+            string wxWinName = "微信")
         {
             _delayConfig = delayConfig;
             _processName = processName;
@@ -104,7 +107,7 @@ namespace WxRobot
                 User32.SetForegroundWindow(mainWindowPtr);
             }
 
-            IsLogin = !(await IsLogout());
+            IsLogin = await CheckWxLogined();
             if (!IsLogin) return "微信已经退出";
 
             await Task.Delay(_delayConfig.AfterBringWxToForeground);
@@ -139,15 +142,12 @@ namespace WxRobot
             return null;
         }
 
-        Task<bool> IsLogout()
+        Task<bool> CheckWxLogined()
         {
             using var app = FlaUI.Core.Application.Attach(_wxProcess.Id);
             using var auto = new UIA3Automation();
             var mainWin = app.GetMainWindow(auto);
-            var btn = mainWin
-                .FindAllByXPath("/Pane[2]/Pane/Pane[2]/Pane/Pane/Pane[1]/Pane/Pane[2]/Pane/Button")
-                .FirstOrDefault()?.AsButton();
-            return Task.FromResult(btn?.Name == "登录");
+            return Task.FromResult(mainWin.ActualWidth >= 700 && mainWin.ActualHeight >= 500);
         }
 
         void KeepWx()
@@ -201,6 +201,47 @@ namespace WxRobot
         public void Dispose()
         {
             _exit = true;
+        }
+
+        public string Login()
+        {
+            using var app = FlaUI.Core.Application.Attach(_wxProcess.Id);
+            using var auto = new UIA3Automation();
+            var mainWin = app.GetMainWindow(auto);
+            var children = mainWin.FindAllChildren();
+            foreach (var child in children)
+            {
+                if (child.Name == "提示" && child.ClassName == "WeUIDialog")
+                {
+                    var okBtn = child.FindAllByXPath("/Pane[2]/Pane[2]/Button").FirstOrDefault().AsButton();
+                    if (okBtn != null)
+                    {
+                        okBtn.Click();
+                    }
+                }
+
+                var loginBtn = child.FindAllByXPath("/Pane/Pane[2]/Pane/Pane/Pane[1]/Pane/Pane[2]/Pane/Button")
+                    .FirstOrDefault()?.AsButton();
+                if (loginBtn != null)
+                {
+                    loginBtn.Click();
+                    return "请在微信上确认登录";
+                }
+
+                var qrBtn = child.FindAllByXPath("/Pane/Pane[2]/Pane/Pane/Pane[1]/Pane/Button")
+                    .FirstOrDefault()?.AsButton();
+                if (qrBtn != null)
+                {
+                    mainWin.SetForeground();
+                    var bitMap = child.Capture();
+                    using var ms = new MemoryStream();
+                    bitMap.Save(ms, ImageFormat.Png);
+                    var base64Str = Convert.ToBase64String(ms.ToArray());
+                    return $"data:image/png;base64,{base64Str}";
+                }
+            }
+
+            return "无法登录";
         }
     }
 }

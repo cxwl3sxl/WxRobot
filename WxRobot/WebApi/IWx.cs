@@ -12,5 +12,7 @@ namespace WxRobot.WebApi
         WxStatus Status();
 
         int PendingQueue();
+
+        string Login();
     }
 }

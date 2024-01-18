@@ -21,4 +21,9 @@ class WxImpl : IWx
     {
         return MainWin.Instance?.PendingQueue() ?? 0;
     }
+
+    public string Login()
+    {
+        return MainWin.Instance?.Login();
+    }
 }
