@@ -1,7 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Drawing.Imaging;
 using FlaUI.Core.AutomationElements;
-using FlaUI.Core.Definitions;
 using FlaUI.UIA3;
 using log4net;
 using Vanara.PInvoke;
