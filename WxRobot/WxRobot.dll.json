@@ -10,6 +10,7 @@
     "BeforeSendMessage": 500,
     "Message": 1000,
     "AfterSearchFriend": 500,
-    "BeforeSearchFriend": 500
+    "BeforeSearchFriend": 500,
+    "AfterSendMessage": 500
   }
 }
