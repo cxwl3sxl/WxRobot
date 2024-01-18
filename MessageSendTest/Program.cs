@@ -58,7 +58,7 @@ namespace MessageSendTest
             {
                 var client = new WebClient();
                 var data = client.UploadString($"{server}{(server.EndsWith("/") ? "" : "/")}api/wx/SendMessage",
-                    $"{{\"to\": \"{to}\",\"message\": \"现在是：{DateTime.Now:yyyy-MM-dd HH:mm:ss}\"}}");
+                    $"{{\"to\": \"{to}\",\"message\": \"current time is: {DateTime.Now:yyyy-MM-dd HH:mm:ss}\"}}");
                 Console.WriteLine(data);
             }
             catch (Exception ex)
