@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using FlaUI.Core.AutomationElements;
+using FlaUI.UIA3;
 using log4net;
 using Vanara.PInvoke;
 // ReSharper disable All
@@ -102,6 +104,9 @@ namespace WxRobot
                 User32.SetForegroundWindow(mainWindowPtr);
             }
 
+            IsLogin = !(await IsLogout());
+            if (!IsLogin) return "微信已经退出";
+
             await Task.Delay(_delayConfig.AfterBringWxToForeground);
             TraceMessage("搜索用户...");
             User32.SetFocus(mainWindowPtr);
@@ -132,6 +137,17 @@ namespace WxRobot
             await Task.Delay(_delayConfig.AfterSendMessage);
             TraceMessage("已发送");
             return null;
+        }
+
+        Task<bool> IsLogout()
+        {
+            using var app = FlaUI.Core.Application.Attach(_wxProcess.Id);
+            using var auto = new UIA3Automation();
+            var mainWin = app.GetMainWindow(auto);
+            var btn = mainWin
+                .FindAllByXPath("/Pane[2]/Pane/Pane[2]/Pane/Pane/Pane[1]/Pane/Pane[2]/Pane/Button")
+                .FirstOrDefault()?.AsButton();
+            return Task.FromResult(btn?.Name == "登录");
         }
 
         void KeepWx()
@@ -176,6 +192,11 @@ namespace WxRobot
         /// 是否运行了多个实例
         /// </summary>
         public bool HasMulti { get; private set; }
+
+        /// <summary>
+        /// 是否已经登录
+        /// </summary>
+        public bool IsLogin { get; private set; } = true;
 
         public void Dispose()
         {

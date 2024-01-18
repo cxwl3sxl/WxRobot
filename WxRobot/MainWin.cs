@@ -6,6 +6,7 @@ using PinFun.Core.Api;
 using PinFun.Core.DataBase;
 using PinFun.Core.ServiceHost.WebHost;
 using PinFun.Core.Utils;
+using WxRobot.WebApi;
 
 // ReSharper disable All
 
@@ -382,10 +383,15 @@ namespace WxRobot
             }
         }
 
-        public string Status()
+        public WxStatus Status()
         {
-            if (_wxWindow == null) return "尚未初始化";
-            return $"多实例：{_wxWindow.HasMulti} 运行中：{_wxWindow.IsWxRunning}";
+            if (_wxWindow == null) return null;
+            return new WxStatus
+            {
+                HasMulti = _wxWindow.HasMulti,
+                IsLogin = _wxWindow.IsLogin,
+                IsWxRunning = _wxWindow.IsWxRunning
+            };
         }
 
         public int PendingQueue()
