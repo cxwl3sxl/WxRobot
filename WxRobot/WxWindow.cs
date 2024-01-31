@@ -83,28 +83,9 @@ namespace WxRobot
             if (string.IsNullOrWhiteSpace(friendName)) return "好友名称不能为空";
             if (string.IsNullOrWhiteSpace(message)) return "消息内容不能为空";
 
-            HWND mainWindowPtr = _wxProcess.MainWindowHandle;
-            if (_wxProcess.MainWindowHandle == IntPtr.Zero)
-            {
-                TraceMessage("程序没有主窗口，尝试激活...");
-                mainWindowPtr = User32.FindWindow(_wxWinClassName, _wxWinName);
-                if (mainWindowPtr == IntPtr.Zero)
-                {
-                    return "无法找到微信主窗口";
-                }
+            var (mainWindowPtr, result) = TryActiveWxWindow();
 
-                if (!User32.SetForegroundWindow(mainWindowPtr))
-                {
-                    return "无法前置微信窗体";
-                }
-
-                User32.ShowWindow(mainWindowPtr, ShowWindowCommand.SW_SHOWDEFAULT);
-            }
-            else
-            {
-                TraceMessage("主窗口存在，前置...");
-                User32.SetForegroundWindow(mainWindowPtr);
-            }
+            if (result != null) return result;
 
             IsLogin = await CheckWxLogined();
             if (!IsLogin) return "微信已经退出";
@@ -141,10 +122,39 @@ namespace WxRobot
             return null;
         }
 
-        Task<bool> CheckWxLogined()
+        (HWND handler, string message) TryActiveWxWindow()
+        {
+            HWND mainWindowPtr = _wxProcess.MainWindowHandle;
+            if (_wxProcess.MainWindowHandle == IntPtr.Zero)
+            {
+                TraceMessage("程序没有主窗口，尝试激活...");
+                mainWindowPtr = User32.FindWindow(_wxWinClassName, _wxWinName);
+                if (mainWindowPtr == IntPtr.Zero)
+                {
+                    return (IntPtr.Zero, "无法找到微信主窗口");
+                }
+
+                if (!User32.SetForegroundWindow(mainWindowPtr))
+                {
+                    return (IntPtr.Zero, "无法前置微信窗体");
+                }
+
+                User32.ShowWindow(mainWindowPtr, ShowWindowCommand.SW_SHOWDEFAULT);
+            }
+            else
+            {
+                TraceMessage("主窗口存在，前置...");
+                User32.SetForegroundWindow(mainWindowPtr);
+            }
+
+            return (mainWindowPtr, null);
+        }
+
+        public Task<bool> CheckWxLogined()
         {
             using var app = FlaUI.Core.Application.Attach(_wxProcess.Id);
             using var auto = new UIA3Automation();
+            TryActiveWxWindow();
             var mainWin = app.GetMainWindow(auto);
             return Task.FromResult(mainWin.ActualWidth >= 700 && mainWin.ActualHeight >= 500);
         }

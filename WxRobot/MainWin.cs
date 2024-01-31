@@ -383,13 +383,16 @@ namespace WxRobot
             }
         }
 
-        public WxStatus Status()
+        public async Task<WxStatus> Status()
         {
             if (_wxWindow == null) return null;
+
+            var isLogin = await _wxWindow.CheckWxLogined();
+
             return new WxStatus
             {
                 HasMulti = _wxWindow.HasMulti,
-                IsLogin = _wxWindow.IsLogin,
+                IsLogin = isLogin,
                 IsWxRunning = _wxWindow.IsWxRunning
             };
         }

@@ -12,7 +12,7 @@ class WxImpl : IWx
         return MainWin.Instance?.CheckResult(idMsg);
     }
 
-    public WxStatus Status()
+    public Task<WxStatus> Status()
     {
         return MainWin.Instance?.Status();
     }

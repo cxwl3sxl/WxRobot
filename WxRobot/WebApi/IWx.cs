@@ -9,7 +9,7 @@ namespace WxRobot.WebApi
 
         MessageInfo CheckResult(Guid idMsg);
 
-        WxStatus Status();
+        Task<WxStatus> Status();
 
         int PendingQueue();
 
