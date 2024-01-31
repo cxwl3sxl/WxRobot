@@ -1,4 +1,6 @@
-﻿namespace WxRobot.WebApi.Impl;
+﻿using PinFun.Core.Api;
+
+namespace WxRobot.WebApi.Impl;
 
 class WxImpl : IWx
 {
@@ -22,7 +24,7 @@ class WxImpl : IWx
         return MainWin.Instance?.PendingQueue() ?? 0;
     }
 
-    public string Login()
+    public Task<FileResult> Login()
     {
         return MainWin.Instance?.Login();
     }

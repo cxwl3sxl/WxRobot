@@ -1,4 +1,5 @@
-﻿using PinFun.Core.Api.Attributes;
+﻿using PinFun.Core.Api;
+using PinFun.Core.Api.Attributes;
 
 namespace WxRobot.WebApi
 {
@@ -13,6 +14,6 @@ namespace WxRobot.WebApi
 
         int PendingQueue();
 
-        string Login();
+        Task<FileResult> Login();
     }
 }

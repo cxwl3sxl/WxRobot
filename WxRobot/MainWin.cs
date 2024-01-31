@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Text;
 using log4net;
 using Newtonsoft.Json;
 using PinFun.Core.Api;
@@ -402,9 +403,45 @@ namespace WxRobot
             return _pendingQueue.Count;
         }
 
-        public string Login()
+        public async Task<FileResult> Login()
         {
-            return _wxWindow?.Login();
+            var content = string.Empty;
+            if (_wxWindow != null)
+            {
+                if (await _wxWindow.CheckWxLogined())
+                {
+                    content = "已登录";
+                }
+            }
+
+            if (content == string.Empty)
+            {
+                content = _wxWindow?.Login();
+                if (content == null)
+                {
+                    content = $"<h4>未知结果，请到微信电脑端确认</h4>";
+                }
+                else if (content.StartsWith("data:image/png;base64,"))
+                {
+                    content = $"<img src='{content}'/>";
+                }
+                else
+                {
+                    content = $"<h4>{content}</h4>";
+                }
+            }
+
+            var sb = new StringBuilder();
+            sb.AppendLine("<html>");
+            sb.AppendLine("    <head>");
+            sb.AppendLine("        <title>登录结果</title>");
+            sb.AppendLine("    </head>");
+            sb.AppendLine("    <body>");
+            sb.AppendLine(content);
+            sb.AppendLine("    </body>");
+            sb.AppendLine("</html>");
+            return new FileResult(Encoding.UTF8.GetBytes(sb.ToString()))
+                .WithContentType("text/html; charset=utf8");
         }
     }
 }
